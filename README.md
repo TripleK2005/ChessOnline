@@ -24,8 +24,10 @@ Công nghệ sử dụng:
 Hướng dẫn chạy dự án:
 ---------------------
 1. Cài đặt .NET 8 SDK và SQL Server Express (hoặc tương thích)
+
 2. Clone project về máy:
    git clone https://github.com/TripleK2005/ChessOnline.git
+   
 3.Cấu hình kết nối và cài package
 
 Cấu hình chuỗi kết nối trong appsettings.json
@@ -82,5 +84,6 @@ MIT License
 **Tiến độ hiện tại:**  
 - Đã hoàn thành setup migration, kết nối database.
 - Còn lại: rất nhiều ;))
+
 
 
