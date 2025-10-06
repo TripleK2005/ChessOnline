@@ -9,19 +9,11 @@
     }
   },
   "profiles": {
-    "http": {
+    "ChessOnline": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5033",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
+      // 👉 Dự án sẽ tự bật cả HTTP và HTTPS
       "applicationUrl": "https://localhost:7046;http://localhost:5033",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

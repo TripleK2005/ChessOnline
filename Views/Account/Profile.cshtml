@@ -1,5 +1,29 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ChessOnline.Models.User
+
 @{
+    ViewData["Title"] = "Profile";
 }
+
+<h2>Profile</h2>
+
+@if (Model != null)
+{
+    <div class="card" style="width: 22rem;">
+        <div class="card-body">
+            <h4 class="card-title">@Model.Username</h4>
+            <p class="card-text"><strong>Email:</strong> @Model.Email</p>
+            <p class="card-text"><strong>Role:</strong> @Model.Role</p>
+            <p class="card-text"><strong>Created At:</strong> @Model.CreatedAt.ToString("yyyy-MM-dd")</p>
+            @if (!string.IsNullOrEmpty(Model.Avatar))
+            {
+                <img src="@Model.Avatar" alt="Avatar" class="img-thumbnail" style="max-width:120px;" />
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-danger">Không tìm thấy thông tin người dùng.</p>
+}
+ @* <a asp-action="ChangePassword" class="btn btn-warning mt-3">Change Password</a>  *@
+

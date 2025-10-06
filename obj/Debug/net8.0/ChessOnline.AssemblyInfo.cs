@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChessOnline")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d7bab78a5c4d72d9bef2da4151d4b46f477f5a8")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChessOnline")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChessOnline")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

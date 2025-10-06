@@ -187,3 +187,14 @@ D:\BTL_LTW_ChessOnline\ChessOnline\obj\Debug\net8.0\refint\ChessOnline.dll
 D:\BTL_LTW_ChessOnline\ChessOnline\obj\Debug\net8.0\ChessOnline.pdb
 D:\BTL_LTW_ChessOnline\ChessOnline\obj\Debug\net8.0\ChessOnline.genruntimeconfig.cache
 D:\BTL_LTW_ChessOnline\ChessOnline\obj\Debug\net8.0\ref\ChessOnline.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\Microsoft.OpenApi.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\obj\Debug\net8.0\ChessOnline.MvcApplicationPartsAssemblyInfo.cs
+D:\BTL_LTW_ChessOnline\ChessOnline\obj\Debug\net8.0\ChessOnline.sourcelink.json
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\Microsoft.Extensions.WebEncoders.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+D:\BTL_LTW_ChessOnline\ChessOnline\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
