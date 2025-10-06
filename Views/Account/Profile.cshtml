@@ -25,5 +25,21 @@ else
 {
     <p class="text-danger">Không tìm thấy thông tin người dùng.</p>
 }
- @* <a asp-action="ChangePassword" class="btn btn-warning mt-3">Change Password</a>  *@
+<a asp-action="ChangePassword" class="btn btn-warning mt-3">Change Password</a>
+<form asp-action="UploadAvatar" method="post" enctype="multipart/form-data">
+    <div class="form-group mt-3">
+        <label for="avatar">Chọn ảnh đại diện:</label>
+        <input type="file" name="avatar" class="form-control" accept="image/*" />
+    </div>
+    <button type="submit" class="btn btn-warning mt-2">Upload Avatar</button>
+</form>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info mt-2">@TempData["Message"]</div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 

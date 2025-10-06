@@ -136,6 +136,28 @@ namespace ChessOnline.Controllers
             return View(result.Data);
         }
 
+        // POST: /Account/UploadAvatar
+        [HttpPost]
+        public async Task<IActionResult> UploadAvatar(IFormFile avatar)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login");
+            if (avatar == null || avatar.Length == 0)
+            {
+                TempData["Message"] = "Vui lòng chọn tệp ảnh.";
+                return RedirectToAction("Profile");
+            }
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            // Gọi service để lưu ảnh đại diện
+            var result = await _userService.UploadAvatarAsync(userId, avatar);
+            if (!result.Success)
+            {
+                TempData["Message"] = result.Message;
+                return RedirectToAction("Profile");
+            }
+            TempData["Message"] = "Cập nhật ảnh đại diện thành công!";
+            return RedirectToAction("Profile");
+        }
 
         // GET: /Account/ChangePassword
         [HttpGet]
