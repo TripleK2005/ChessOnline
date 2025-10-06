@@ -34,6 +34,10 @@ Cài các package:
 
 -dotnet add package Microsoft.EntityFrameworkCore
 
+-dotnet add package Swashbuckle.AspNetCore
+
+-dotnet add package Microsoft.AspNetCore.Authentication.Cookies
+
 -dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 -dotnet add package Microsoft.EntityFrameworkCore.Tools
@@ -51,14 +55,11 @@ Cài các package:
    dotnet run
    hoặc F5 trong Visual Studio
 
-Cấu trúc dự án:
-<img width="457" height="652" alt="image" src="https://github.com/user-attachments/assets/697d79c1-cd78-481c-8795-d00ccc47487b" />
-
 
 | Tính năng                    | Trạng thái   |
-| ---------------------------- | ------------ |
+| ---------------------------- | -------------|
 | Thiết kế database & models   | ✅ Hoàn thành |
-| Đăng ký/đăng nhập người dùng | ⬜ Chưa       |
+| Đăng ký/đăng nhập người dùng | ✅ Hoàn thành |
 | Logic tạo/tham gia ván cờ    | ⬜ Chưa       |
 | Theo dõi nước đi             | ⬜ Chưa       |
 | Chat trong ván cờ            | ⬜ Chưa       |
@@ -82,6 +83,7 @@ MIT License
 **Tiến độ hiện tại:**  
 - Đã hoàn thành setup migration, kết nối database.
 - Còn lại: rất nhiều ;))
+
 
 
 
