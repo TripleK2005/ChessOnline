@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ChessOnline.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
 </head>
 <body>
     <header>
@@ -27,7 +29,6 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        @* Nếu đã có xác thực, thay thế đoạn dưới bằng kiểm tra User.Identity.IsAuthenticated *@
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
@@ -36,6 +37,19 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
                             </li>
+
+                            @* 👇 Hiển thị link Admin Panel nếu role = Admin *@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark fw-bold text-danger"
+                                       asp-controller="Admin"
+                                       asp-action="Dashboard">
+                                        Admin Panel
+                                    </a>
+                                </li>
+                            }
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
@@ -50,6 +64,7 @@
                             </li>
                         }
                     </ul>
+
                 </div>
             </div>
         </nav>

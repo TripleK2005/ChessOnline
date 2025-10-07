@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using ChessOnline.Data;
-using ChessOnline.DTOs;
+﻿using ChessOnline.Data;
+using ChessOnline.DTOs.AccountDtos;
 using ChessOnline.Models;
+using ChessOnline.Models.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChessOnline.Services
 {
@@ -45,6 +46,12 @@ namespace ChessOnline.Services
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
             if (user == null)
                 return ApiResponse<User>.Fail("User not found");
+
+            if (user.Status == AccountStatus.Banned)
+                return ApiResponse<User>.Fail("Your account was banned.");
+
+            if (user.Status == AccountStatus.Suspended)
+                return ApiResponse<User>.Fail("Your account was suspended.");
 
             var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (result != PasswordVerificationResult.Success)

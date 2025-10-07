@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ChessOnline.DTOs;
+using ChessOnline.DTOs.AccountDtos;
 using ChessOnline.Models;
 
 namespace ChessOnline.Services

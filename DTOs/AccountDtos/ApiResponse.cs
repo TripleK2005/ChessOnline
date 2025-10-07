@@ -1,4 +1,4 @@
-﻿namespace ChessOnline.DTOs
+﻿namespace ChessOnline.DTOs.AccountDtos
 {
     public class ApiResponse<T>
     {

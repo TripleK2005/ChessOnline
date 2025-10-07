@@ -1,7 +1,7 @@
 ﻿using ChessOnline.Models.Account;
 using ChessOnline.Services;
 using Microsoft.AspNetCore.Mvc;
-using ChessOnline.DTOs;
+using ChessOnline.DTOs.AccountDtos;
 using ChessOnline.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -88,7 +88,8 @@ namespace ChessOnline.Controllers
     {
             new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Email, user.Email ?? "")
+            new Claim(ClaimTypes.Email, user.Email ?? ""),
+            new Claim(ClaimTypes.Role,user.Role ?? "Player")
     };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

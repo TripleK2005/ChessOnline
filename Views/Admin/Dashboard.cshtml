@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2>👑 Admin Dashboard</h2>
+<p>Xin chào, @User.Identity?.Name!</p>
+<p>Vai trò của bạn: @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</p>
+
+<a asp-controller="Admin" asp-action="ManageUsers" class="btn btn-primary mt-3">Quản lý người dùng</a>

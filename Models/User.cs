@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessOnline.Models.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace ChessOnline.Models
@@ -12,6 +13,7 @@ namespace ChessOnline.Models
         public string? Avatar { get; set; }
         public string Role { get; set; } = "Player"; // Player / Admin
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public AccountStatus Status { get; set; } = AccountStatus.Active;
 
         // Navigation
         public ICollection<Game> GamesAsWhite { get; set; }
