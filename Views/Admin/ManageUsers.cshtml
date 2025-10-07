@@ -1,0 +1,106 @@
+﻿@model List<ChessOnline.Models.Admin.ManageUsersViewModel>
+@using ChessOnline.Models.Enums
+
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<h2 class="mb-3">@ViewData["Title"]</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Thêm người dùng
+    </a>
+</div>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Tên đăng nhập</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Trạng thái</th>
+            <th>Ngày tạo</th>
+            <th class="text-center" style="width: 250px;">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserID</td>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+
+                <td>
+                    @if (user.Status == AccountStatus.Active)
+                    {
+                        <span class="badge bg-success">Hoạt động</span>
+                    }
+                    else if (user.Status == AccountStatus.Banned)
+                    {
+                        <span class="badge bg-danger">Bị khóa</span>
+                    }
+                    else if (user.Status == AccountStatus.Suspended)
+                    {
+                        <span class="badge bg-warning text-dark">Tạm khóa</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Chờ xác minh</span>
+                    }
+                </td>
+
+                <td>@user.CreatedAt.ToString("yyyy-MM-dd")</td>
+
+                <td class="text-center">
+                    <div class="btn-group" role="group">
+                        <!-- Xem -->
+                        <a asp-action="Details" asp-route-id="@user.UserID" class="btn btn-sm btn-info text-white">
+                            <i class="bi bi-eye"></i> Xem
+                        </a>
+
+                        <!-- Sửa -->
+                        <a asp-action="Edit" asp-route-id="@user.UserID" class="btn btn-sm btn-primary">
+                            <i class="bi bi-pencil-square"></i> Sửa
+                        </a>
+
+                        <!-- Xóa -->
+                        <form asp-action="Delete" asp-route-id="@user.UserID" method="post"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này không?');"
+                              style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Xóa
+                            </button>
+                        </form>
+
+                        <!-- Khóa / Mở khóa -->
+                        @if (user.Status == AccountStatus.Active)
+                        {
+                            <form asp-action="BanUser" asp-route-id="@user.UserID" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-warning text-dark">
+                                    <i class="bi bi-lock"></i> Khóa
+                                </button>
+                            </form>
+                        }
+                        else if (user.Status == AccountStatus.Banned)
+                        {
+                            <form asp-action="UnbanUser" asp-route-id="@user.UserID" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <i class="bi bi-unlock"></i> Mở khóa
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

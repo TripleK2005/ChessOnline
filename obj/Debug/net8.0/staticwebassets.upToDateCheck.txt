@@ -59,3 +59,6 @@ wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
 wwwroot\uploads\avatars\1c055180-3eda-463e-8ca0-6a7f8f34c487_clock.webp
+wwwroot\uploads\avatars\6a7a0fb0-8b4c-4b09-ba62-0f403ca66b8c_background.png.jpg
+wwwroot\uploads\avatars\b44566e0-e944-4838-bfd4-1ee4bf1508df_nagakawa.webp
+wwwroot\uploads\avatars\facb1e90-f175-4cbf-be64-90abdb7e2220_nagakawa.webp

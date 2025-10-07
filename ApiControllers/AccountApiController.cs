@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ChessOnline.DTOs;
 using ChessOnline.Services;
+using ChessOnline.DTOs.AccountDtos;
 
 namespace ChessOnline.ApiControllers
 {
