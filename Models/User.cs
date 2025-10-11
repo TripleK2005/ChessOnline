@@ -1,6 +1,7 @@
 ﻿using ChessOnline.Models.Enums;
 using System;
 using System.Collections.Generic;
+using ChessOnline.Models.Games;
 
 namespace ChessOnline.Models
 {

@@ -1,5 +1,205 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Chơi cờ";
+    var gameId = ViewBag.GameId ?? "default-game-id";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
+
+<style>
+    /* Làm cho bàn cờ responsive */
+    .board-container {
+        width: 100%;
+        max-width: 640px; /* Giới hạn chiều rộng tối đa của bàn cờ */
+        margin: auto;
+    }
+
+    /* Đảm bảo các thành phần trong info panel có khoảng cách hợp lý */
+    .game-info-panel .card-body h5 {
+        margin-top: 1rem;
+    }
+
+        .game-info-panel .card-body h5:first-child {
+            margin-top: 0;
+        }
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-lg-8 d-flex justify-content-center align-items-center">
+            <div class="board-container" id="myBoard"></div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card card-dark text-white game-info-panel">
+                <div class="card-header">
+                    <h4 class="mb-0">Thông tin ván đấu</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-white-50">TRẠNG THÁI</h5>
+                    <p id="status" class="fs-5 fw-bold">Đang chờ kết nối...</p>
+
+                    <hr class="light">
+
+                    <h5 class="card-title text-white-50">LƯỢT ĐI</h5>
+                    <p id="turn" class="fs-5"></p>
+
+                    <hr class="light">
+
+                    <h5 class="card-title text-white-50">LỊCH SỬ NƯỚC ĐI (PGN)</h5>
+                    <div id="pgn" class="p-2 rounded" style="height: 200px; overflow-y: auto; background-color: #3b3936; font-family: monospace;"></div>
+                </div>
+            </div>
+
+            <div class="mt-3 d-grid gap-2">
+                <button class="btn btn-outline-warning">Cầu hòa</button>
+                <button class="btn btn-outline-danger">Xin thua</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+    <script>
+        // Lấy GameId từ Razor vào JavaScript
+        const currentGameId = "@gameId";
+
+        $(document).ready(function () {
+            // ===== KHỞI TẠO BIẾN =====
+            var board = null; // UI Bàn cờ từ Chessboard.js
+            var game = new Chess(); // Logic cờ vua từ Chess.js
+            var playerColor = 'w'; // Mặc định người chơi là Trắng, sẽ được server cập nhật
+
+            // ===== KẾT NỐI SIGNALR =====
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/gameHub") // Đảm bảo URL này khớp với Hub endpoint của bạn
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            // ===== CÁC HÀM CỦA BÀN CỜ (CHESSBOARD.JS) =====
+
+            // Được gọi khi người dùng bắt đầu kéo một quân cờ
+            function onDragStart(source, piece) {
+                // Chỉ cho phép kéo khi:
+                // 1. Game chưa kết thúc
+                if (game.game_over()) return false;
+                // 2. Đến lượt của người chơi
+                if (game.turn() !== playerColor) return false;
+                // 3. Quân cờ người chơi kéo là quân của họ
+                if (piece.search(new RegExp('^' + playerColor)) === -1) return false;
+            }
+
+            // Được gọi khi người dùng thả một quân cờ vào ô hợp lệ
+            function onDrop(source, target) {
+                // Thử thực hiện nước đi trong logic chess.js
+                var move = game.move({
+                    from: source,
+                    to: target,
+                    promotion: 'q' // Luôn luôn phong Hậu khi tốt đến cuối bàn cờ
+                });
+
+                // Nếu nước đi không hợp lệ, trả quân cờ về vị trí cũ
+                if (move === null) return 'snapback';
+
+                var moveData = {
+                    from: move.from,
+                    to: move.to,
+                    promotion: 'q',
+                    after: game.fen() // Lấy FEN hiện tại của bàn cờ sau khi đã đi
+                };
+
+                // Nếu hợp lệ, gửi nước đi lên server
+                sendMoveToServer(moveData);
+            }
+
+            // Được gọi sau khi một nước đi hoàn thành trên UI để cập nhật trạng thái
+            function onSnapEnd() {
+                updateStatus();
+            }
+
+            // ===== CÁC HÀM TIỆN ÍCH VÀ GIAO TIẾP VỚI SERVER =====
+
+            // Cập nhật trạng thái (lượt đi, chiếu, hết cờ...) hiển thị trên UI
+            function updateStatus() {
+                var statusText = '';
+                var turnText = game.turn() === 'w' ? 'Trắng' : 'Đen';
+
+                if (game.in_checkmate()) {
+                    statusText = 'Chiếu hết! ' + turnText + ' thua.';
+                } else if (game.in_draw()) {
+                    statusText = 'Hòa cờ!';
+                } else {
+                    statusText = 'Đến lượt đi của ' + turnText;
+                    if (game.in_check()) {
+                        statusText += ' (đang bị chiếu)';
+                    }
+                }
+
+                $('#status').text(statusText);
+                $('#turn').text(turnText);
+                $('#pgn').text(game.pgn());
+            }
+
+            // Gửi thông tin nước đi lên SignalR Hub
+            function sendMoveToServer(move) {
+                connection.invoke("SendMove", currentGameId, move)
+                    .catch(err => console.error("Lỗi khi gửi nước đi: ", err.toString()));
+            }
+
+            // ===== CẤU HÌNH VÀ KHỞI ĐỘNG =====
+
+            var config = {
+                draggable: true,
+                position: 'start',
+                onDragStart: onDragStart,
+                pieceTheme: '/img/chesspieces/wikipedia/{piece}.png',
+                onDrop: onDrop,
+                onSnapEnd: onSnapEnd
+            };
+            board = Chessboard('myBoard', config);
+            $(window).resize(board.resize); // Tự động resize bàn cờ khi thay đổi kích thước cửa sổ
+
+            // Bắt đầu kết nối SignalR và tham gia ván cờ
+            connection.start().then(function () {
+                console.log("SignalR đã kết nối.");
+                connection.invoke("JoinGame", currentGameId)
+                    .catch(err => console.error("Lỗi khi tham gia ván cờ: ", err.toString()));
+            }).catch(err => console.error("Lỗi kết nối SignalR: ", err.toString()));
+
+            // ===== LẮNG NGHE SỰ KIỆN TỪ SERVER (SIGNALR) =====
+
+            // Nhận nước đi từ đối thủ
+            connection.on("ReceiveMove", function (move) {
+                console.log("Nhận được nước đi từ đối thủ:", move);
+                game.move(move);
+                board.position(game.fen());
+                updateStatus();
+            });
+
+            // Khi game bắt đầu, server sẽ cho biết bạn là quân màu gì
+            connection.on("GameStarted", function (assignedColor) {
+                playerColor = assignedColor;
+                if (playerColor === 'b') {
+                    board.orientation('black'); // Xoay bàn cờ nếu là quân Đen
+                }
+                console.log("Ván cờ bắt đầu. Bạn cầm quân: " + (playerColor === 'w' ? 'Trắng' : 'Đen'));
+                updateStatus();
+            });
+
+            // Lắng nghe các sự kiện khác từ server (ví dụ: đối thủ thoát,...)
+            connection.on("PlayerDisconnected", function(message) {
+                alert(message);
+                $('#status').text(message);
+            });
+
+            // Cập nhật trạng thái ban đầu
+            updateStatus();
+        });
+    </script>
 }

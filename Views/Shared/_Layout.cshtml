@@ -4,85 +4,215 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ChessOnline</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ChessOnline.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/ChessOnline.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
+    <style>
+        body {
+            background-color: #312e2b;
+            color: #efefef;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 260px;
+            z-index: 1000;
+            background-color: #262421;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .sidebar .nav-link {
+            color: #c7c5c3;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-radius: 6px;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: #3d3b38;
+            color: white;
+        }
+
+        .sidebar .nav-link .fa-fw {
+            margin-right: 10px;
+        }
+
+        .sidebar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .sidebar-brand:hover {
+            color: #e0e0e0;
+        }
+
+        .user-dropdown .dropdown-toggle {
+            color: white;
+        }
+
+        .user-dropdown .dropdown-toggle::after {
+            display: none;
+        }
+
+        .user-dropdown img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+
+        /* Responsive cho di động */
+        .mobile-toggler {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+        }
+        @@media (max-width: 992px) {
+            .sidebar {
+                left: -260px; /* Ẩn sidebar đi */
+            }
+
+            .sidebar.active {
+                left: 0; /* Hiện sidebar khi có class active */
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggler {
+                display: block; /* Hiện nút toggler trên mobile */
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ChessOnline</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Profile">Profile</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
-                            </li>
+    <button class="btn btn-dark mobile-toggler" type="button" id="sidebarToggler">
+        <i class="fas fa-bars"></i>
+    </button>
 
-                            @* 👇 Hiển thị link Admin Panel nếu role = Admin *@
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark fw-bold text-danger"
-                                       asp-controller="Admin"
-                                       asp-action="Dashboard">
-                                        Admin Panel
-                                    </a>
-                                </li>
-                            }
+    <div class="d-flex flex-column flex-shrink-0 p-3 sidebar" id="sidebar">
+        @* (Phần này trong file của bạn đã đúng) *@
+         <a asp-controller="Home" asp-action="Index" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none sidebar-brand">
+            <i class="fas fa-chess-knight me-3"></i>
+            <span>ChessOnline</span>
+        </a>
+        <hr>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                        }
-                    </ul>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item mb-2">
+                <a asp-controller="Home" asp-action="Index" class="nav-link" aria-current="page">
+                    <i class="fas fa-home fa-fw"></i> Trang chủ
+                </a>
+            </li>
+            <li class="mb-2">
+                <a asp-controller="Game" asp-action="Index" class="nav-link" aria-current="page">
+                    <i class="fas fa-play fa-fw"></i> Chơi cờ
+                </a>
+            </li>
+            <li class="mb-2">
+                <a asp-controller="Game" asp-action="Index" class="nav-link" aria-current="page">
+                    <i class="fas fa-puzzle-piece fa-fw"></i> Giải đố
+                </a>
+            </li>
+            <li class="mb-2">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-graduation-cap fa-fw"></i> Học
+                </a>
+            </li>
 
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item mt-3 mb-2">
+                    <h6 class="text-white-50 text-uppercase px-3" style="font-size: 0.8rem;">Quản trị</h6>
+                </li>
+                <li class="mb-2">
+                    <a asp-controller="Admin" asp-action="Dashboard" class="nav-link">
+                        <i class="fas fa-tachometer-alt fa-fw"></i> Dashboard
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a asp-controller="Admin" asp-action="ManageUsers" class="nav-link">
+                        <i class="fas fa-users-cog fa-fw"></i> Quản lý User
+                    </a>
+                </li>
+            }
+        </ul>
+        <hr>
+
+        @inject IHttpContextAccessor HttpContextAccessor
+
+        <div class="dropdown user-dropdown">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var avatarUrl = HttpContextAccessor.HttpContext.User.FindFirst("Avatar")?.Value;
+                if (string.IsNullOrEmpty(avatarUrl))
+                {
+                    avatarUrl = "/images/default-avatar.png";
+                }
+
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="@avatarUrl" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                    <strong>@User.Identity.Name</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile"><i class="fas fa-user-circle fa-fw me-2"></i>Hồ sơ</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard"><i class="fas fa-shield-halved fa-fw me-2"></i>Admin Panel</a></li>
+                    }
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt fa-fw me-2"></i>Đăng xuất</a></li>
+                </ul>
+            }
+            else
+            {
+                <div class="d-grid gap-2">
+                    <a class="btn btn-success" asp-controller="Account" asp-action="Register"><i class="fas fa-user-plus me-2"></i>Đăng ký</a>
+                    <a class="btn btn-outline-light" asp-controller="Account" asp-action="Login"><i class="fas fa-sign-in-alt me-2"></i>Đăng nhập</a>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            }
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - ChessOnline - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <div class="main-content" id="main-content">
+        <main role="main">
+            @RenderBody()
+        </main>
+
+        <footer class="border-top footer text-muted mt-5">
+            <div class="container">
+                &copy; @DateTime.Now.Year - ChessOnline - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.getElementById('sidebarToggler').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

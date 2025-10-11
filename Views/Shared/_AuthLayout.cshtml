@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ChessOnline</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            /* Ảnh nền với một lớp phủ màu đen mờ để làm nổi bật form */
+            background-image: linear-gradient(rgba(18, 18, 18, 0.8), rgba(18, 18, 18, 0.8)), url('/images/auth-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Giữ ảnh nền cố định khi cuộn */
+            color: #efefef;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-container {
+            flex: 1 0 auto; /* Cho phép container chính co giãn */
+        }
+
+        .auth-header {
+            padding: 2rem 0;
+        }
+
+            .auth-header a {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: white;
+                text-decoration: none;
+                transition: color 0.2s ease-in-out;
+            }
+
+                .auth-header a:hover {
+                    color: #ddd;
+                }
+
+        .auth-footer {
+            flex-shrink: 0; /* Ngăn footer co lại */
+            padding: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container container">
+        <header class="auth-header text-center">
+            <a asp-controller="Home" asp-action="Index">
+                <i class="fas fa-chess-knight me-2"></i> ChessOnline
+            </a>
+        </header>
+
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="auth-footer text-center text-white-50">
+        &copy; @DateTime.Now.Year - ChessOnline
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

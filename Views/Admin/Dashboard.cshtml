@@ -2,8 +2,118 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h2>👑 Admin Dashboard</h2>
-<p>Xin chào, @User.Identity?.Name!</p>
-<p>Vai trò của bạn: @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</p>
+<h1 class="mb-4 text-white"><i class="fas fa-tachometer-alt me-2"></i>@ViewData["Title"]</h1>
 
-<a asp-controller="Admin" asp-action="ManageUsers" class="btn btn-primary mt-3">Quản lý người dùng</a>
+<div class="row g-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-dark text-white border-secondary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase">Tổng User</h6>
+                        <h3 class="fw-bold mb-0">1,234</h3>
+                    </div>
+                    <i class="fas fa-users fa-2x text-info"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-dark text-white border-secondary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase">Ván cờ Live</h6>
+                        <h3 class="fw-bold mb-0">567</h3>
+                    </div>
+                    <i class="fas fa-chess fa-2x text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-dark text-white border-secondary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase">Đăng ký (24h)</h6>
+                        <h3 class="fw-bold mb-0">+8</h3>
+                    </div>
+                    <i class="fas fa-user-plus fa-2x text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-dark text-white border-secondary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase">Trạng thái Server</h6>
+                        <h3 class="fw-bold mb-0 text-success">Online</h3>
+                    </div>
+                    <i class="fas fa-server fa-2x text-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-dark text-white mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Người dùng đăng ký gần đây</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Tên đăng nhập</th>
+                        <th>Email</th>
+                        <th>Vai trò</th>
+                        <th>Ngày tham gia</th>
+                        <th class="text-end">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Magnus</td>
+                        <td>magnus@example.com</td>
+                        <td><span class="badge bg-info">User</span></td>
+                        <td>10/10/2025</td>
+                        <td class="text-end">
+                            <a href="#" class="btn btn-sm btn-outline-info mx-1" title="Xem chi tiết"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-outline-warning mx-1" title="Sửa"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="#" class="btn btn-sm btn-outline-danger mx-1" title="Xóa"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Hikaru</td>
+                        <td>hikaru@example.com</td>
+                        <td><span class="badge bg-info">User</span></td>
+                        <td>09/10/2025</td>
+                        <td class="text-end">
+                            <a href="#" class="btn btn-sm btn-outline-info mx-1" title="Xem chi tiết"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-outline-warning mx-1" title="Sửa"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="#" class="btn btn-sm btn-outline-danger mx-1" title="Xóa"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AdminUser</td>
+                        <td>admin@chessonline.com</td>
+                        <td><span class="badge bg-danger">Admin</span></td>
+                        <td>01/01/2025</td>
+                        <td class="text-end">
+                            <a href="#" class="btn btn-sm btn-outline-info mx-1" title="Xem chi tiết"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-outline-warning mx-1" title="Sửa"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="#" class="btn btn-sm btn-outline-danger mx-1" title="Xóa"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-end mt-2">
+            <a asp-action="ManageUsers" asp-controller="Admin" class="link-light">Xem tất cả người dùng <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+</div>

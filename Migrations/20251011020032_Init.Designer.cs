@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChessOnline.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251007025019_AddAccountStatusEnum")]
-    partial class AddAccountStatusEnum
+    [Migration("20251011020032_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,7 @@ namespace ChessOnline.Migrations
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("ChessOnline.Models.Game", b =>
+            modelBuilder.Entity("ChessOnline.Models.Games.Game", b =>
                 {
                     b.Property<int>("GameID")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace ChessOnline.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -87,12 +87,15 @@ namespace ChessOnline.Migrations
 
                     b.HasIndex("BlackPlayerID");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
                     b.HasIndex("WhitePlayerID");
 
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("ChessOnline.Models.Move", b =>
+            modelBuilder.Entity("ChessOnline.Models.Games.Move", b =>
                 {
                     b.Property<int>("MoveID")
                         .ValueGeneratedOnAdd()
@@ -132,7 +135,7 @@ namespace ChessOnline.Migrations
                     b.ToTable("Moves");
                 });
 
-            modelBuilder.Entity("ChessOnline.Models.Report", b =>
+            modelBuilder.Entity("ChessOnline.Models.Games.Report", b =>
                 {
                     b.Property<int>("ReportID")
                         .ValueGeneratedOnAdd()
@@ -193,6 +196,9 @@ namespace ChessOnline.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -204,7 +210,7 @@ namespace ChessOnline.Migrations
 
             modelBuilder.Entity("ChessOnline.Models.Chat", b =>
                 {
-                    b.HasOne("ChessOnline.Models.Game", "Game")
+                    b.HasOne("ChessOnline.Models.Games.Game", "Game")
                         .WithMany("Chats")
                         .HasForeignKey("GameID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -221,7 +227,7 @@ namespace ChessOnline.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ChessOnline.Models.Game", b =>
+            modelBuilder.Entity("ChessOnline.Models.Games.Game", b =>
                 {
                     b.HasOne("ChessOnline.Models.User", "BlackPlayer")
                         .WithMany("GamesAsBlack")
@@ -240,9 +246,9 @@ namespace ChessOnline.Migrations
                     b.Navigation("WhitePlayer");
                 });
 
-            modelBuilder.Entity("ChessOnline.Models.Move", b =>
+            modelBuilder.Entity("ChessOnline.Models.Games.Move", b =>
                 {
-                    b.HasOne("ChessOnline.Models.Game", "Game")
+                    b.HasOne("ChessOnline.Models.Games.Game", "Game")
                         .WithMany("Moves")
                         .HasForeignKey("GameID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -259,9 +265,9 @@ namespace ChessOnline.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("ChessOnline.Models.Report", b =>
+            modelBuilder.Entity("ChessOnline.Models.Games.Report", b =>
                 {
-                    b.HasOne("ChessOnline.Models.Game", "Game")
+                    b.HasOne("ChessOnline.Models.Games.Game", "Game")
                         .WithMany("Reports")
                         .HasForeignKey("GameID")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -285,7 +291,7 @@ namespace ChessOnline.Migrations
                     b.Navigation("Reporter");
                 });
 
-            modelBuilder.Entity("ChessOnline.Models.Game", b =>
+            modelBuilder.Entity("ChessOnline.Models.Games.Game", b =>
                 {
                     b.Navigation("Chats");
 

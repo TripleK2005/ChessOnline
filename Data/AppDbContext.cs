@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ChessOnline.Models;
+using ChessOnline.Models.Games;
 
 namespace ChessOnline.Data
 {
@@ -33,6 +34,10 @@ namespace ChessOnline.Data
                 .WithMany(u => u.GamesAsBlack)
                 .HasForeignKey(g => g.BlackPlayerID)
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<Game>()
+                .HasIndex(g => g.Code)
+                .IsUnique();
 
             // Move - Game
             modelBuilder.Entity<Move>()
@@ -40,6 +45,8 @@ namespace ChessOnline.Data
                 .WithMany(g => g.Moves)
                 .HasForeignKey(m => m.GameID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+           
 
             // Move - Player (User)
             modelBuilder.Entity<Move>()

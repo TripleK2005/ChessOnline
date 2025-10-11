@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -19,4 +19,54 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+/* =============================================== */
+/* ===         DARK THEME FORM STYLES          === */
+/* =============================================== */
+
+/* Card nền tối */
+.card-dark {
+    background-color: #262421;
+    border: 1px solid #444;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Input nền tối */
+.form-control-dark {
+    color: #efefef;
+    background-color: #3b3936;
+    border: 1px solid #555;
+}
+
+    .form-control-dark:focus {
+        color: #efefef;
+        background-color: #3b3936;
+        border-color: #198754; /* Màu xanh lá của btn-success */
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    }
+
+    .form-control-dark::placeholder {
+        color: #8a8886;
+    }
+
+/* Tùy chỉnh cho Floating Labels trên nền tối */
+.form-floating > .form-control-dark {
+    padding: 1rem 0.75rem;
+}
+
+    .form-floating > .form-control-dark:focus ~ label,
+    .form-floating > .form-control-dark:not(:placeholder-shown) ~ label {
+        opacity: 0.85;
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        color: #ccc; /* Màu chữ của label khi float lên */
+    }
+
+    .form-floating > .form-control-dark ~ label {
+        color: #8a8886; /* Màu chữ của label khi ở trong input */
+    }
+
+/* Đường kẻ ngang */
+hr.light {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
