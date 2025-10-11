@@ -1,45 +1,77 @@
 ﻿@model ChessOnline.Models.User
 
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Hồ sơ cá nhân";
 }
 
-<h2>Profile</h2>
+<style>
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border: 4px solid #444;
+    }
+
+    .list-group-item-dark {
+        background-color: transparent;
+        border-color: rgba(255, 255, 255, 0.125);
+    }
+</style>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
 @if (Model != null)
 {
-    <div class="card" style="width: 22rem;">
+    <div class="card card-dark text-white shadow-lg">
         <div class="card-body">
-            <h4 class="card-title">@Model.Username</h4>
-            <p class="card-text"><strong>Email:</strong> @Model.Email</p>
-            <p class="card-text"><strong>Role:</strong> @Model.Role</p>
-            <p class="card-text"><strong>Created At:</strong> @Model.CreatedAt.ToString("yyyy-MM-dd")</p>
-            @if (!string.IsNullOrEmpty(Model.Avatar))
-            {
-                <img src="@Model.Avatar" alt="Avatar" class="img-thumbnail" style="max-width:120px;" />
-            }
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img src="@(string.IsNullOrEmpty(Model.Avatar) ? "/images/default-avatar.png" : Model.Avatar)"
+                         alt="Avatar" class="img-thumbnail rounded-circle profile-avatar mb-3" />
+                    <h4 class="mb-0">@Model.Username</h4>
+                    <p class="text-white-50">@Model.Role</p>
+                </div>
+                <div class="col-md-8">
+                    <h5 class="mb-3">Thông tin chi tiết</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-envelope fa-fw me-2 text-success"></i>Email</span>
+                            <span class="text-white-50">@Model.Email</span>
+                        </li>
+                        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-calendar-alt fa-fw me-2 text-success"></i>Ngày tham gia</span>
+                            <span class="text-white-50">@Model.CreatedAt.ToString("dd/MM/yyyy")</span>
+                        </li>
+                    </ul>
+
+                    <hr class="light my-4">
+
+                    <h5 class="mb-3">Hành động</h5>
+                    <form asp-action="UploadAvatar" method="post" enctype="multipart/form-data" class="mb-3">
+                        <div class="input-group">
+                            <input type="file" name="avatar" class="form-control form-control-dark" required>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-upload me-2"></i>Tải lên</button>
+                        </div>
+                    </form>
+                    <a asp-action="ChangePassword" class="btn btn-outline-light">
+                        <i class="fas fa-key me-2"></i>Đổi mật khẩu
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 }
 else
 {
-    <p class="text-danger">Không tìm thấy thông tin người dùng.</p>
-}
-<a asp-action="ChangePassword" class="btn btn-warning mt-3">Change Password</a>
-<form asp-action="UploadAvatar" method="post" enctype="multipart/form-data">
-    <div class="form-group mt-3">
-        <label for="avatar">Chọn ảnh đại diện:</label>
-        <input type="file" name="avatar" class="form-control" accept="image/*" />
-    </div>
-    <button type="submit" class="btn btn-warning mt-2">Upload Avatar</button>
-</form>
-
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-info mt-2">@TempData["Message"]</div>
+    <div class="alert alert-danger">Không tìm thấy thông tin người dùng.</div>
 }
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

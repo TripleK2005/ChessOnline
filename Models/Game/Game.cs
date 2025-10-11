@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ChessOnline.Models
+namespace ChessOnline.Models.Games
 {
     public class Game
     {
@@ -16,6 +16,7 @@ namespace ChessOnline.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Navigation
+        public Game() { }
         public User WhitePlayer { get; set; }
         public User BlackPlayer { get; set; }
         public ICollection<Move> Moves { get; set; }

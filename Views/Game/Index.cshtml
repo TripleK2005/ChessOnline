@@ -1,5 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Sảnh chờ";
 }
+
+<style>
+    .lobby-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="lobby-container">
+    <div class="col-md-6 col-lg-5">
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        <div class="card card-dark text-white text-center p-4 mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Tạo phòng mới</h3>
+                <p class="text-white-50">Bắt đầu một ván cờ mới và mời bạn bè của bạn.</p>
+                <a asp-action="Create" asp-controller="Game" class="btn btn-success btn-lg fw-bold w-100">
+                    <i class="fas fa-plus me-2"></i> Tạo phòng
+                </a>
+            </div>
+        </div>
+
+        <div class="card card-dark text-white text-center p-4">
+            <div class="card-body">
+                <h3 class="card-title">Tham gia phòng</h3>
+                <p class="text-white-50">Nhập mã phòng 6 số để tham gia ván đấu.</p>
+                <form asp-action="Join" asp-controller="Game" method="post">
+                    <div class="input-group input-group-lg">
+                        <input type="text" name="roomCode" class="form-control form-control-dark text-center" placeholder="_ _ _ _ _ _" maxlength="6" required />
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="fas fa-arrow-right-to-bracket"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

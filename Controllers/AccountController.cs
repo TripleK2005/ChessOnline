@@ -89,7 +89,8 @@ namespace ChessOnline.Controllers
             new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Email, user.Email ?? ""),
-            new Claim(ClaimTypes.Role,user.Role ?? "Player")
+            new Claim(ClaimTypes.Role,user.Role ?? "Player"),
+            new Claim("Avatar", user.Avatar ?? "")
     };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -141,22 +142,49 @@ namespace ChessOnline.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadAvatar(IFormFile avatar)
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login");
             if (avatar == null || avatar.Length == 0)
             {
                 TempData["Message"] = "Vui lòng chọn tệp ảnh.";
                 return RedirectToAction("Profile");
             }
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // Chuyển sang ClaimTypes.NameIdentifier vì nó an toàn hơn
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdString, out var userId))
+            {
+                return Unauthorized();
+            }
+
             // Gọi service để lưu ảnh đại diện
             var result = await _userService.UploadAvatarAsync(userId, avatar);
-            if (!result.Success)
+
+            if (result.Success)
+            {
+                // ===== CẬP NHẬT LẠI CLAIM SAU KHI UPLOAD THÀNH CÔNG =====
+                // Lấy danh tính hiện tại của người dùng
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                // Tìm và xóa claim "Avatar" cũ (nếu có)
+                var oldAvatarClaim = claimsIdentity.FindFirst("Avatar");
+                if (oldAvatarClaim != null)
+                {
+                    claimsIdentity.RemoveClaim(oldAvatarClaim);
+                }
+
+                // Thêm claim "Avatar" mới với đường dẫn đúng từ service
+                claimsIdentity.AddClaim(new Claim("Avatar", result.Data));
+
+                // Đăng nhập lại người dùng với thông tin mới để cập nhật cookie
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                // ==========================================================
+
+                TempData["Message"] = "Cập nhật ảnh đại diện thành công!";
+            }
+            else
             {
                 TempData["Message"] = result.Message;
-                return RedirectToAction("Profile");
             }
-            TempData["Message"] = "Cập nhật ảnh đại diện thành công!";
+
             return RedirectToAction("Profile");
         }
 

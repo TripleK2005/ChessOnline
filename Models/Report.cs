@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChessOnline.Models
+namespace ChessOnline.Models.Games
 {
     public class Report
     {

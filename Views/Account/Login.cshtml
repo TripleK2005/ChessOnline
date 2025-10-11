@@ -1,25 +1,55 @@
-﻿@model ChessOnline.Models.Account.LoginViewModel
+﻿@{
+    Layout = "_AuthLayout";
+}
+@model ChessOnline.Models.Account.LoginViewModel
 
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Đăng nhập";
 }
 
-<h2>Login</h2>
+<style>
+    .login-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
 
-<form asp-action="Login" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Username"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+<div class="row login-container">
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-dark text-white rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="card-title text-center mb-4">Đăng nhập</h3>
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Username" class="form-control form-control-dark" placeholder="Tên đăng nhập" />
+                        <label asp-for="Username">Tên đăng nhập</label>
+                        <span asp-validation-for="Username" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Password" type="password" class="form-control form-control-dark" placeholder="Mật khẩu" />
+                        <label asp-for="Password">Mật khẩu</label>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success btn-lg fw-bold"><i class="fas fa-arrow-right-to-bracket me-2"></i>Đăng nhập</button>
+                    </div>
+
+                    <hr class="light my-4">
+
+                    <div class="text-center">
+                        <a asp-action="Register" asp-controller="Account" class="link-light">Chưa có tài khoản? Đăng ký</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

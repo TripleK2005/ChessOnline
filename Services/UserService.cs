@@ -78,6 +78,18 @@ namespace ChessOnline.Services
             var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "avatars");
             Directory.CreateDirectory(uploadsFolder);
 
+            // ===== THÊM ĐOẠN NÀY ĐỂ XÓA ẢNH CŨ =====
+            if (!string.IsNullOrEmpty(user.Avatar))
+            {
+                // Chuyển đổi từ đường dẫn web sang đường dẫn vật lý để xóa
+                var oldImagePath = Path.Combine(_env.WebRootPath, user.Avatar.TrimStart('/'));
+                if (File.Exists(oldImagePath))
+                {
+                    File.Delete(oldImagePath);
+                }
+            }
+            // ==========================================
+
             var fileName = $"{Guid.NewGuid()}_{file.FileName}";
             var filePath = Path.Combine(uploadsFolder, fileName);
 

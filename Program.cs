@@ -1,7 +1,7 @@
 ﻿using ChessOnline.Data;
 using ChessOnline.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +14,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Dependency Injection
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IGameService, GameService>();
+
 
 // MVC + API
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR(); // ✅ Thêm SignalR
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -54,6 +58,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 // --- BUILD APP ---
 var app = builder.Build();
+
+app.MapHub<GameHub>("/gameHub"); // ✅ Đăng ký endpoint hub
 
 // --- MIDDLEWARE PIPELINE ---
 if (!app.Environment.IsDevelopment())
